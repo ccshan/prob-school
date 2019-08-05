@@ -1,9 +1,10 @@
 {-# LANGUAGE TupleSections, DeriveFoldable, DeriveTraversable #-}
 {-# OPTIONS -Wall #-}
+{-# OPTIONS_GHC -fno-warn-unused-imports #-}
 module LogisticRegression where
 
 import Dist
-import Plot (renderToFile, plotTrajectory, plotHeatMap, binFloat)
+import Plot (renderToFile, plotTrajectory, plotHeatMap, binFloat, removeOutlierPairs)
 import Data.Default (Default (def))
 import Control.Applicative (liftA2)
 import Control.Monad (replicateM, forM_, liftM)
@@ -67,13 +68,10 @@ main :: IO ()
 main = do
   samples <- tabSample 50000 -- liftM (map (,1::Int) . drop 1000) . tabMH 50000
            $ logistic1DRegression fakePatients
-  -- _ <- renderToFile def "/tmp/plot.png" (plotTrajectory def samples)
-  let inRange (c0,c1) = -40 < c0 && c0 < 0 && 0 < c1 && c1 < 8
-  _ <- renderToFile def "/tmp/plot.png"
-     $ plotHeatMap def (binFloat 50, binFloat 50)
-     $ filter (inRange . fst)
-     $ samples
-  return ()
+  -- renderToFile def "/tmp/plot.png" (plotTrajectory def samples)
+  renderToFile def "/tmp/plot.png"
+    $ plotHeatMap def (binFloat 50, binFloat 50)
+    $ removeOutlierPairs samples
 
 --------------------------------------------------------------------------------
 -- Generalizing logistic regression from 1D to 3D

@@ -9,10 +9,14 @@ import Graphics.Rendering.Chart.Backend.Cairo (renderableToFile, FileOptions)
 import Control.Lens ((.~), (%~), _1)
 import Control.Applicative (liftA2)
 import Control.Monad (forM_)
+import Control.Arrow (first)
 import Data.Default (Default (def))
 import Data.Array (Ix, accumArray, assocs)
 import Data.Maybe (catMaybes)
+import Data.List (mapAccumL)
 import Data.Colour (dissolve, opaque, black)
+import Data.Function (on)
+import qualified Data.Map.Strict as Map
 import qualified Data.Number.LogFloat as LF
 import Numeric (showEFloat, showFFloat)
 
@@ -223,6 +227,30 @@ plotHeatMap HeatMap{_heatmap_style=fill} (binx,biny) xyws =
         heatAxis = _axis_viewport (autoAxis (map snd values)) (0,1)
         xs = values >>= \(((x1,_),_,(x2,_)),_) -> [x1,x2]
         ys = values >>= \(((_,y1),_,(_,y2)),_) -> [y1,y2]
+
+newtype OnFst ab = OnFst {unOnFst :: ab}
+newtype OnSnd ab = OnSnd {unOnSnd :: ab}
+instance Eq  a => Eq  (OnFst (a,b)) where (==)    = (==)    `on` (fst . unOnFst)
+instance Ord a => Ord (OnFst (a,b)) where compare = compare `on` (fst . unOnFst)
+instance Eq  b => Eq  (OnSnd (a,b)) where (==)    = (==)    `on` (snd . unOnSnd)
+instance Ord b => Ord (OnSnd (a,b)) where compare = compare `on` (snd . unOnSnd)
+
+removeOutliers :: (Ord a, Ord w, Fractional w) => [(a,w)] -> [(a,w)]
+removeOutliers aws = Map.assocs m2
+  where m = Map.fromListWith (+) aws
+        margin = sum (Map.elems m) / 20000
+        bound = map fst . dropWhile ((< margin) . snd) . snd . mapAccumL f 0
+          where f acc (a,w) = (acc', (a,acc')) where acc' = acc + w
+        m1 = case bound (Map.toAscList m) of
+          []  -> Map.empty
+          a:_ -> Map.dropWhileAntitone (< a) m
+        m2 = case bound (Map.toDescList m1) of
+          []  -> Map.empty
+          a:_ -> Map.takeWhileAntitone (<= a) m1
+
+removeOutlierPairs :: (Ord a, Ord b, Ord w, Fractional w) => [((a,b),w)] -> [((a,b),w)]
+removeOutlierPairs = map (first unOnFst) . removeOutliers . map (first OnFst)
+                   . map (first unOnSnd) . removeOutliers . map (first OnSnd)
 
 --------------------------------------------------------------------------------
 -- Tools for plotting points
