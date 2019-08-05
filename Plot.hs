@@ -14,7 +14,7 @@ import Data.Default (Default (def))
 import Data.Array (Ix, accumArray, assocs)
 import Data.Maybe (catMaybes)
 import Data.List (mapAccumL)
-import Data.Colour (dissolve, opaque, black)
+import Data.Colour (dissolve, opaque, black, withOpacity)
 import Data.Function (on)
 import qualified Data.Map.Strict as Map
 import qualified Data.Number.LogFloat as LF
@@ -264,19 +264,22 @@ instance Default Trajectory where
     { _trajectory_lines  = False
     , _trajectory_points = True }
 
+plotTrajectories :: (PlotValue x, PlotValue y)
+                 => Trajectory -> [[(x, y)]] -> [Plot x y]
+plotTrajectories traj xyss =
+  [ toPlot $ plot_lines_values .~ [xys]
+           $ plot_lines_style .~ solidLine width (dissolve alpha color)
+           $ def
+  | _trajectory_lines traj
+  , (xys, color) <- zip xyss defaultColorSeq ] ++
+  [ toPlot $ plot_points_values .~ concat xyss
+           $ plot_points_style .~ filledCircles width (black `withOpacity` alpha)
+           $ def
+  | _trajectory_points traj ]
+  where alpha = fromIntegral (n + 1) ** (-0.2)
+        width = fromIntegral (n + 1) ** (-0.1) * 3
+        n = sum (map length xyss)
+
 plotTrajectory :: (PlotValue x, PlotValue y)
                => Trajectory -> [(x, y)] -> [Plot x y]
-plotTrajectory traj xys =
-  [toPlot line   | _trajectory_lines  traj] ++
-  [toPlot points | _trajectory_points traj]
-  where line = plot_lines_values .~ [xys]
-             $ (plot_lines_style . line_color) %~ dissolve alpha
-             $ (plot_lines_style . line_width) .~ width
-             $ def
-        points = plot_points_values .~ xys
-               $ (plot_points_style . point_color) %~ dissolve alpha
-               $ (plot_points_style . point_radius) .~ width
-               $ def
-        alpha = fromIntegral (n + 1) ** (-0.2)
-        width = fromIntegral (n + 1) ** (-0.1) * 3
-        n = length xys
+plotTrajectory traj xys = plotTrajectories traj [xys]
