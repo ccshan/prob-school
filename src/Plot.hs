@@ -5,7 +5,7 @@ module Plot where
 
 import Graphics.Rendering.Chart
 import Graphics.Rendering.Chart.Utils (isValidNumber)
-import Graphics.Rendering.Chart.Backend.Cairo (renderableToFile, FileOptions)
+import Graphics.Rendering.Chart.Backend.Diagrams (renderableToFile, FileOptions)
 import Control.Lens ((.~), (%~), _1)
 import Control.Applicative (liftA2)
 import Control.Monad (forM_)

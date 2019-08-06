@@ -1,0 +1,33 @@
+name:                prob-school
+version:             0.1.0.0
+github:              "githubuser/prob-school"
+license:             BSD3
+author:              "Author name here"
+maintainer:          "example@example.com"
+copyright:           "2019 Author name here"
+
+extra-source-files:
+- README.md
+
+description:         Please see the README on GitHub at <https://github.com/githubuser/prob-school#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- Chart
+- Chart-diagrams
+- array
+- bytestring
+- cassava
+- colour
+- containers
+- data-default
+- erf
+- lens
+- logfloat
+- pretty-show
+- random
+- transformers
+- vector
+
+library:
+  source-dirs: src
