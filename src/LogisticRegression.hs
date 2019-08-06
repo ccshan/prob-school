@@ -68,8 +68,8 @@ main :: IO ()
 main = do
   samples <- tabSample 50000 -- liftM (map (,1::Int) . drop 1000) . tabMH 50000
            $ logistic1DRegression fakePatients
-  -- renderToFile def "/tmp/plot.png" (plotTrajectory def samples)
-  renderToFile def "/tmp/plot.png"
+  -- renderToFile def "/tmp/plot" (plotTrajectory def samples)
+  renderToFile def "/tmp/plot"
     $ plotHeatMap def (binFloat 50, binFloat 50)
     $ removeOutlierPairs samples
 

@@ -15,7 +15,7 @@ main = do
   dat <- readCSV
   let samples = [ (sample Map.! "coeff0", sample Map.! "coeff1")
                 | sample <- dat ]
-  renderToFile def "/tmp/plot.png" (plotTrajectory def samples)
+  renderToFile def "/tmp/plot" (plotTrajectory def samples)
 
 readCSV :: IO [Map.Map B.ByteString Double]
 readCSV = do

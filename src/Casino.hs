@@ -32,7 +32,7 @@ casino' = do
 main :: IO ()
 main = do
   samples <- tabSample 10000 casino'
-  renderToFile def "/tmp/plot.png" (plotHeatMap def (binFloat 20, binIx) samples)
+  renderToFile def "/tmp/plot" (plotHeatMap def (binFloat 20, binIx) samples)
 
 validate :: IO ()
 validate = do
@@ -44,4 +44,4 @@ validate = do
   let lay plots = layout_plots .~ plots
                 $ (layout_x_axis . laxis_generate) .~ scaledAxis def (0.8,1)
                 $ def
-  renderToFile def "/tmp/plot.png" $ lay $ plotHistogram (binFloat 20) estimates
+  renderToFile def "/tmp/plot" $ lay $ plotHistogram (binFloat 20) estimates

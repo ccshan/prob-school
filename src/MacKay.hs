@@ -21,7 +21,7 @@ mackay = density mackayDensity lebesgue
 mackaySample :: IO ()
 mackaySample = do
   samples <- tabSample 500000 mackay
-  renderToFile def "/tmp/plot.png" (plotHistogram (binFloat 50) samples)
+  renderToFile def "/tmp/plot" (plotHistogram (binFloat 50) samples)
 
 step :: MonadDist m => Double -> m Double
 step old = do
@@ -43,20 +43,20 @@ plotTrajectories' xss = plotTrajectories (def { _trajectory_lines = True })
 
 plotSteps :: IO ()
 plotSteps = do
-  renderToFile def "/tmp/density.png" [toPlot (plot_lines_values .~ [[ (x, mackayDensity x) | x <- [-6,-5.9..4] ]] $ def)]
+  renderToFile def "/tmp/density" [toPlot (plot_lines_values .~ [[ (x, mackayDensity x) | x <- [-6,-5.9..4] ]] $ def)]
   trajectories <- fmap (map (drop 1000 . fst))
                 $ tabSample 6
                 $ fmap (\x -> 10 * (x - 0.5)) stdUniform >>= steps 10000
-  renderToFile def "/tmp/plot.png" (plotHistogram (binFloat 50) (map (, 1::Int) (concat trajectories)))
-  renderToFile def "/tmp/trajectory.png" (plotTrajectories' (map (take 50) trajectories))
+  renderToFile def "/tmp/plot" (plotHistogram (binFloat 50) (map (, 1::Int) (concat trajectories)))
+  renderToFile def "/tmp/trajectory" (plotTrajectories' (map (take 50) trajectories))
 
 mackayMH :: IO ()
 mackayMH = do
   samples <- liftM (drop 10000)
            $ tabMH 100000 mackay
-  renderToFile def "/tmp/plot.png"
+  renderToFile def "/tmp/plot"
            $ plotHistogram (binFloat 50)
            $ map (, 1::Int)
            $ samples
-  renderToFile def "/tmp/trajectory.png"
+  renderToFile def "/tmp/trajectory"
            $ plotTrajectories' [take 50 samples]
