@@ -1,0 +1,255 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>LinearRegression.html</title>
+<!-- Created by Maple 2019.1, Linux -->
+</head>
+<a href="LinearRegression.html#MapleAutoBookmark1">LinearRegression.mw</a>
+<ul>
+</ul>
+<hr>
+<a name="MapleAutoBookmark1" />
+
+<body bgcolor="FFFFFF">
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong>restart;</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong>libname := cat(kernelopts(homedir),"/prob-school/maple"),libname;</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_1.gif" width="504" height="17" alt="Typesetting:-mprintslash([libname := "/home/wkb19174/prob-school/maple", "/usr/local/maple2019/lib"], ["/home/wkb19174/prob-school/maple", "/usr/local/maple2019/lib"])" align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong>with(NewSLO);</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_2.gif" width="960" height="13" alt="[Commands, Concrete, Disintegrate, Efficient, PrintVersion, Rename, Reparam, ReparamDetermined, RoundTrip, RoundTrip_postproc, Simplify, SimplifyKB, Summarize, TestDisint, TestEfficient, TestHakaru, T..." align="center" border="0"><br><img src="images/LinearRegression_3.gif" width="960" height="13" alt="[Commands, Concrete, Disintegrate, Efficient, PrintVersion, Rename, Reparam, ReparamDetermined, RoundTrip, RoundTrip_postproc, Simplify, SimplifyKB, Summarize, TestDisint, TestEfficient, TestHakaru, T..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong>with(Hakaru);</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_4.gif" width="960" height="13" alt="[Datum, Pair, UpdateArchive, Version, _Unit, app, ary, bound_names_in, case, closed_bounds, flatten_piecewise, foldr_piecewise, fst, htype_patterns, idx, lift_piecewise, map_piecewiselike, open_bounds..." align="center" border="0"><br><img src="images/LinearRegression_5.gif" width="960" height="13" alt="[Datum, Pair, UpdateArchive, Version, _Unit, app, ary, bound_names_in, case, closed_bounds, flatten_piecewise, foldr_piecewise, fst, htype_patterns, idx, lift_piecewise, map_piecewiselike, open_bounds..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Eddy's motivating problem
+<br>m := Bind(Uniform(0,1), p,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(p^5*(1-p)^3*56, Ret(p)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_6.gif" width="416" height="21" alt="Typesetting:-mprintslash([m := Bind(Uniform(0, 1), p, Weight(`+`(`*`(56, `*`(`^`(p, 5), `*`(`^`(`+`(1, `-`(p)), 3))))), Ret(p)))], [Bind(Uniform(0, 1), p, Weight(`+`(`*`(56, `*`(`^`(p, 5), `*`(`^`(`+`..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong>fromLO(improve(toLO(m)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_7.gif" width="181" height="36" alt="Weight(`/`(1, 9), BetaD(6, 4))" align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong>plot(density[BetaD](6,4)(p), p=0..1);</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#000000" size="3" face="Times New Roman"><img src="images/LinearRegression_8.gif" width="400" height="400" alt="Plot_2d" align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Zero-dimensional Bayesian linear regression -- in other words, averaging
+<br>m := Bind(Gaussian(0,10), c0,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](c0,3)(y0),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](c0,3)(y1),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](c0,3)(y2),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](c0,3)(y3),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Ret(c0))))));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_9.gif" width="960" height="65" alt="Typesetting:-mprintslash([m := Bind(Gaussian(0, 10), c0, Weight(`+`(`/`(`*`(`/`(1, 6), `*`(`^`(2, `/`(1, 2)), `*`(exp(`+`(`-`(`*`(`/`(1, 18), `*`(`^`(`+`(y0, `-`(c0)), 2))))))))), `*`(`^`(Pi, `/`(1, 2..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Notice the Gaussian mean computed symbolically in the output below
+<br>fromLO(improve(toLO(m)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_10.gif" width="960" height="57" alt="Weight(`+`(`/`(`*`(`/`(1, 44172), `*`(exp(`+`(`-`(`*`(`/`(103, 2454), `*`(`^`(y0, 2)))), `*`(`/`(1, 7362), `*`(`+`(`*`(200, `*`(y1)), `*`(200, `*`(y2)), `*`(200, `*`(y3))), `*`(y0))), `-`(`*`(`/`(103,..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Generalize zero-dimensional Bayesian linear regression from 4 data points to an array of n data points
+<br>m := Bind(Gaussian(0,10), c0,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Bind(Plate(n,i,Weight(density[Gaussian](c0,3)(idx(y,i)),Ret(Unit))), dummy,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Ret(c0)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_11.gif" width="746" height="69" alt="Typesetting:-mprintslash([m := Bind(Gaussian(0, 10), c0, Bind(Plate(n, i, Weight(`+`(`/`(`*`(`/`(1, 6), `*`(`^`(2, `/`(1, 2)), `*`(exp(`+`(`-`(`*`(`/`(1, 18), `*`(`^`(`+`(Hakaru:-idx(y, i), `-`(c0)), ..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Notice the symbolic sums and n in the output below
+<br>fromLO(improve(toLO(m)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_12.gif" width="960" height="115" alt="Weight(`+`(`/`(`*`(3, `*`(exp(`/`(`*`(`+`(`-`(`*`(100, `*`(sum(`*`(`^`(Hakaru:-idx(y, i), 2)), i = 0 .. `+`(n, `-`(1))), `*`(n)))), `*`(100, `*`(`^`(sum(Hakaru:-idx(y, i), i = 0 .. `+`(n, `-`(1))), 2)..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Generalize the standard deviations from 10 to s and from 3 to t
+<br>m := Bind(Gaussian(0,s), c0,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Bind(Plate(n,i,Weight(density[Gaussian](c0,t)(idx(y,i)),Ret(Unit))), dummy,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Ret(c0)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_13.gif" width="736" height="73" alt="Typesetting:-mprintslash([m := Bind(Gaussian(0, s), c0, Bind(Plate(n, i, Weight(`+`(`/`(`*`(`/`(1, 2), `*`(`^`(2, `/`(1, 2)), `*`(exp(`+`(`-`(`/`(`*`(`/`(1, 2), `*`(`^`(`+`(Hakaru:-idx(y, i), `-`(c0))..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Notice the symbolic s and t in the output below
+<br>fromLO(improve(toLO(m)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_14.gif" width="907" height="124" alt="Weight(`/`(`*`(`^`(2, `+`(`-`(n))), `*`(exp(`+`(`-`(`/`(`*`(`/`(1, 2), `*`(`+`(`*`(n, `*`(`^`(s, 2), `*`(sum(`*`(`^`(Hakaru:-idx(y, i), 2)), i = 0 .. `+`(n, `-`(1)))))), `-`(`*`(`^`(sum(Hakaru:-idx(y,..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># One-dimensional Bayesian linear regression
+<br>m := Bind(Gaussian(0,10), c0,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Bind(Gaussian(0,10), c1,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](c0+c1*x0,3)(y0),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](c0+c1*x1,3)(y1),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](c0+c1*x2,3)(y2),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](c0+c1*x3,3)(y3),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Ret([c0,c1])))))));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_15.gif" width="960" height="53" alt="Typesetting:-mprintslash([m := Bind(Gaussian(0, 10), c0, Bind(Gaussian(0, 10), c1, Weight(`+`(`/`(`*`(`/`(1, 6), `*`(`^`(2, `/`(1, 2)), `*`(exp(`+`(`-`(`*`(`/`(1, 18), `*`(`^`(`+`(`-`(`*`(c1, `*`(x0))..." align="center" border="0"><br><img src="images/LinearRegression_16.gif" width="960" height="53" alt="Typesetting:-mprintslash([m := Bind(Gaussian(0, 10), c0, Bind(Gaussian(0, 10), c1, Weight(`+`(`/`(`*`(`/`(1, 6), `*`(`^`(2, `/`(1, 2)), `*`(exp(`+`(`-`(`*`(`/`(1, 18), `*`(`^`(`+`(`-`(`*`(c1, `*`(x0))..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Notice that the mean computed for c1 below takes the inner product of x and y, as if computing their correlation
+<br>fromLO(improve(toLO(m)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_17.gif" width="960" height="54" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_18.gif" width="960" height="54" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_19.gif" width="960" height="54" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_20.gif" width="960" height="42" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_21.gif" width="960" height="42" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_22.gif" width="960" height="42" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_23.gif" width="960" height="42" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_24.gif" width="960" height="39" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_25.gif" width="960" height="39" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_26.gif" width="960" height="39" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_27.gif" width="960" height="39" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_28.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_29.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_30.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_31.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_32.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Use Plate to remove duplication of Gaussian(0,10) in the prior distribution
+<br>m := Bind(Plate(2,j,Gaussian(0,10)), c,
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](idx(c,0)+idx(c,1)*x0,3)(y0),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](idx(c,0)+idx(c,1)*x1,3)(y1),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](idx(c,0)+idx(c,1)*x2,3)(y2),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Weight(density[Gaussian](idx(c,0)+idx(c,1)*x3,3)(y3),
+<br> &nbsp;&nbsp;&nbsp;&nbsp;Ret(c))))));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_33.gif" width="960" height="53" alt="Typesetting:-mprintslash([m := Bind(Plate(2, j, Gaussian(0, 10)), c, Weight(`+`(`/`(`*`(`/`(1, 6), `*`(`^`(2, `/`(1, 2)), `*`(exp(`+`(`-`(`*`(`/`(1, 18), `*`(`^`(`+`(y0, `-`(Hakaru:-idx(c, 0)), `-`(`*..." align="center" border="0"><br><img src="images/LinearRegression_34.gif" width="960" height="53" alt="Typesetting:-mprintslash([m := Bind(Plate(2, j, Gaussian(0, 10)), c, Weight(`+`(`/`(`*`(`/`(1, 6), `*`(`^`(2, `/`(1, 2)), `*`(exp(`+`(`-`(`*`(`/`(1, 18), `*`(`^`(`+`(y0, `-`(Hakaru:-idx(c, 0)), `-`(`*..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># Notice that the loop for c is unrolled below into its two iterations
+<br>fromLO(improve(toLO(m)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="center"><table width='100%'>
+<tr>
+<td valign="top" align="center"><font color="#0000ff" size="3" face="Times New Roman"><img src="images/LinearRegression_35.gif" width="960" height="54" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_36.gif" width="960" height="54" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_37.gif" width="960" height="54" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_38.gif" width="960" height="42" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_39.gif" width="960" height="42" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_40.gif" width="960" height="42" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_41.gif" width="960" height="42" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_42.gif" width="960" height="39" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_43.gif" width="960" height="39" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_44.gif" width="960" height="39" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_45.gif" width="960" height="39" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_46.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_47.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_48.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_49.gif" width="960" height="38" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_50.gif" width="960" height="35" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"><br><img src="images/LinearRegression_51.gif" width="960" height="35" alt="Weight(`+`(`/`(`*`(`/`(1, 36), `*`(exp(`/`(`*`(`+`(`*`(`+`(`-`(`*`(20900, `*`(`^`(x1, 2)))), `*`(`+`(`*`(20000, `*`(x2)), `*`(20000, `*`(x3))), `*`(x1)), `-`(`*`(20900, `*`(`^`(x2, 2)))), `*`(20000, `..." align="center" border="0"></td>
+</tr>
+</table></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># EXERCISE: Generalize one-dimensional Bayesian linear regression from 4 data points to an array of n data points
+<br>m := EXERCISE;</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong>fromLO(improve(toLO(m)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong># EXERCISE: Generalize the standard deviations from 10 to s and from 3 to t
+<br>m := EXERCISE;</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+<p align="left"><table>
+<tr>
+<td valign="top" align="center"><font color="#78000e" size="3" face="Courier New"><strong>&gt; </strong></font></td>
+<td valign="top"><font color="#78000e" size="3" face="Courier New"><strong>fromLO(improve(toLO(m)));</td>
+</tr>
+</table></strong></font>&nbsp;</p>
+</body>
+</html>
