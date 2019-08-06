@@ -53,4 +53,4 @@ main :: IO ()
 main = do
   samples <- liftM (drop 1000) . tabMH 50000
            $ linear1DRegression fakePoints
-  renderToFile def "/tmp/plot.png" (plotTrajectory def samples)
+  renderToFile def "/tmp/plot" (plotTrajectory def samples)

@@ -5,10 +5,10 @@ module Plot where
 
 import Graphics.Rendering.Chart
 import Graphics.Rendering.Chart.Utils (isValidNumber)
-import Graphics.Rendering.Chart.Backend.Cairo (renderableToFile, FileOptions)
+import Graphics.Rendering.Chart.Backend.Diagrams (renderableToFile, FileOptions(..), FileFormat(SVG))
 import Control.Lens ((.~), (%~), _1)
 import Control.Applicative (liftA2)
-import Control.Monad (forM_)
+import Control.Monad (void, forM_)
 import Control.Arrow (first)
 import Data.Default (Default (def))
 import Data.Array (Ix, accumArray, assocs)
@@ -27,9 +27,11 @@ instance (PlotValue x, PlotValue y) => ToRenderable [Plot x y] where
   toRenderable plots = toRenderable (layout_plots .~ plots $ def)
 
 renderToFile :: ToRenderable a => FileOptions -> FilePath -> a -> IO ()
-renderToFile fo path r = do
-  _ <- renderableToFile fo path (toRenderable r)
-  return ()
+renderToFile fo path r = void $ renderableToFile foWithSvg (path ++ ".svg") (toRenderable r)
+  where
+    -- set this to SVG because the default for cairo is png
+    -- and we want to easily support both Cairo and Diagrams
+    foWithSvg = fo {_fo_format = SVG}
 
 --------------------------------------------------------------------------------
 -- Integrate LogFloat with Chart

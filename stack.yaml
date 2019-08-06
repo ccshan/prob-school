@@ -1,0 +1,8 @@
+resolver: lts-13.26
+
+packages:
+- .
+
+# potentially add Charts-cairo here
+# we need to also add an older version of cairo though (or use an older lts)
+# extra-deps: []
