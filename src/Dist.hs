@@ -3,6 +3,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module Dist where
 
+import Control.Monad.Fix
 import System.Random (StdGen, getStdRandom, Random (random))
 import qualified Data.Number.LogFloat as LF
 import Data.Number.Erf (invnormcdf)
@@ -169,7 +170,7 @@ flatDirichlet n = fmap normalize (replicateM n stdExponential)
 -- Inference on a distribution by importance sampling
 
 newtype Sample a = Sample (StateT Prob (MaybeT (State StdGen)) a)
-  deriving (Functor, Applicative, Monad)
+  deriving (Functor, Applicative, Monad, MonadFix)
 
 instance MonadWeightedSet Sample where
   reject              = Sample mzero
