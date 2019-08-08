@@ -2,7 +2,7 @@
 module LinearRegression where
 
 import Dist
-import Plot (renderToFile, plotTrajectory, plotHeatMap, binFloat)
+import Plot (renderToFile, plotTrajectory, plotHeatMap, binFloat, removeOutlierPairs)
 import Data.Default (Default (def))
 import Control.Monad (replicateM, forM_, liftM)
 
@@ -51,6 +51,13 @@ linear1DRegression xys = do
 
 main :: IO ()
 main = do
-  samples <- liftM (drop 1000) . tabMH 50000
-           $ linear1DRegression fakePoints
-  renderToFile def "/tmp/plot" (plotTrajectory def samples)
+  let m :: MonadDist m => m (Double, Double)
+      m = linear1DRegression fakePoints
+  samplesIS <- tabSample 50000 m
+  renderToFile def "/tmp/plotIS"
+    $ plotHeatMap def (binFloat 100, binFloat 100)
+    $ removeOutlierPairs samplesIS
+  samplesMH <- liftM (drop 1000) (tabMH 50000 m)
+  renderToFile def "/tmp/plotMH"
+    $ plotTrajectory def
+    $ samplesMH

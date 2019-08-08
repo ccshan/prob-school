@@ -15,11 +15,11 @@ main = do
   dat <- readCSV
   let samples = [ (sample Map.! "coeff0", sample Map.! "coeff1")
                 | sample <- dat ]
-  renderToFile def "/tmp/plot" (plotTrajectory def samples)
+  renderToFile def "/tmp/plotHMC" (plotTrajectory def samples)
 
 readCSV :: IO [Map.Map B.ByteString Double]
 readCSV = do
-  csv <- B.readFile "output.csv"
+  csv <- B.readFile "../stan/output.csv"
   let comment line = not (B.null line) && B.head line == hash
       csv' = B.intercalate (B.singleton lf) $ filter (not . comment) $ B.split lf csv
       lf   = 10 :: Word8

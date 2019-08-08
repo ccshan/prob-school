@@ -59,6 +59,8 @@ logistic1DRegression patients = do
   forM_ patients (\(score, survival) -> do
     let b = coeff0 + coeff1 * score
         p = recip (1 + exp_ (-b))
+    -- survival' <- fromList [(True, p), (False, 1-p)]
+    -- observe (survival == survival')
     factor (if survival then p else 1-p))
   return (coeff0, coeff1)
 
@@ -66,12 +68,16 @@ logistic1DRegression patients = do
 
 main :: IO ()
 main = do
-  samples <- tabSample 50000 -- liftM (map (,1::Int) . drop 1000) . tabMH 50000
-           $ logistic1DRegression fakePatients
-  -- renderToFile def "/tmp/plot" (plotTrajectory def samples)
-  renderToFile def "/tmp/plot"
+  let m :: MonadDist m => m (Double, Double)
+      m = logistic1DRegression fakePatients
+  samplesIS <- tabSample 50000 m
+  renderToFile def "/tmp/plotIS"
     $ plotHeatMap def (binFloat 50, binFloat 50)
-    $ removeOutlierPairs samples
+    $ removeOutlierPairs samplesIS
+  samplesMH <- liftM (drop 1000) (tabMH 50000 m)
+  renderToFile def "/tmp/plotMH"
+    $ plotTrajectory def
+    $ samplesMH
 
 --------------------------------------------------------------------------------
 -- Generalizing logistic regression from 1D to 3D

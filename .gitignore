@@ -23,6 +23,7 @@ cabal.project.local~
 
 # STAN
 LogisticRegression
+LinearRegression
 *.d
 *.hpp
 output.csv
