@@ -3,7 +3,7 @@
 module MacKay where
 
 import Dist
-import Plot (renderToFile, plotHistogram, binFloat, plotTrajectories, _trajectory_lines)
+import Plot (renderToFile, plotHistogram, binFloat, plotTrajectories, _trajectory_lines, removeOutliers)
 import Graphics.Rendering.Chart (Plot, toPlot, plot_lines_values)
 import Control.Lens ((.~))
 import Data.Default (Default (def))
@@ -20,8 +20,8 @@ mackay = density mackayDensity lebesgue
 
 mackaySample :: IO ()
 mackaySample = do
-  samples <- tabSample 500000 mackay
-  renderToFile def "/tmp/plot" (plotHistogram (binFloat 50) samples)
+  samples <- tabSample 30000 mackay
+  renderToFile def "/tmp/plot" (plotHistogram (binFloat 50) (removeOutliers samples))
 
 step :: MonadDist m => Double -> m Double
 step old = do
@@ -46,7 +46,7 @@ plotSteps = do
   renderToFile def "/tmp/density" [toPlot (plot_lines_values .~ [[ (x, mackayDensity x) | x <- [-6,-5.9..4] ]] $ def)]
   trajectories <- fmap (map (drop 1000 . fst))
                 $ tabSample 6
-                $ fmap (\x -> 10 * (x - 0.5)) stdUniform >>= steps 10000
+                $ fmap (\x -> 10 * (x - 0.5)) stdUniform >>= steps 5000
   renderToFile def "/tmp/plot" (plotHistogram (binFloat 50) (map (, 1::Int) (concat trajectories)))
   renderToFile def "/tmp/trajectory" (plotTrajectories' (map (take 50) trajectories))
 
