@@ -54,6 +54,7 @@ m1, m1' :: MonadDist m => m Double
 m1 = do
   x <- normal 0 1
   y <- normal x 1
+  -- y <- observe (x > 10) -- BAD
   return x
 m1' = do
   x <- normal 0 1
@@ -113,7 +114,7 @@ m5' = do
 m6, m6' :: MonadDist m => m Double
 m6 = do
   x <- normal 0 1
-  factor (dnorm 7 0.75 x)
+  factor (dnorm x 0.75 7)
   return x
 m6' = do
   factor (exp_ (-15.68) * prob (0.8 / sqrt (2 * pi)))
