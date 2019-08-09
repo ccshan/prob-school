@@ -148,6 +148,9 @@ class MonadWeightedSet m => MonadDist m where
 
 -- Lots of distributions can be expressed by transforming stdUniform
 
+uniform :: MonadDist m => Double -> Double -> m Double
+uniform a b = fmap (\x -> a + (b - a) * x) stdUniform
+
 stdNormal :: MonadDist m => m Double
 stdNormal = fmap invnormcdf stdUniform -- inverse transform method
 
