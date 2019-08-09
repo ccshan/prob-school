@@ -9,9 +9,6 @@ import Control.Lens ((.~))
 import Data.Default (Default (def))
 import Control.Monad (liftM)
 
-lebesgue :: MonadDist m => m Double
-lebesgue = density (recip . dnorm 0 10) (normal 0 10)
-
 mackayDensity :: Double -> Prob
 mackayDensity x = exp_ (0.4 * (x - 0.4) ^ (2::Int) - 0.08 * x ^ (4::Int))
 

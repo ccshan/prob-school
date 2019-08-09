@@ -160,6 +160,9 @@ dnorm loc scale outcome =
   / prob scale
   / prob (sqrt (2 * pi))
 
+lebesgue :: MonadDist m => m Double
+lebesgue = density (recip . dnorm 0 10) (normal 0 10)
+
 stdExponential :: MonadDist m => m Double
 stdExponential = fmap (negate . log) stdUniform
 

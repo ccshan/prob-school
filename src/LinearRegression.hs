@@ -44,6 +44,8 @@ linear1DRegression xys = do
   coeff0 <- normal 0 10
   coeff1 <- normal 0 10
   forM_ xys (\(x, y) -> do
+    -- y' <- normal (coeff0 + coeff1 * x) 3
+    -- observe (y == y')
     factor (dnorm (coeff0 + coeff1 * x) 3 y))
   return (coeff0, coeff1)
 
